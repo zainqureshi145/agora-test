@@ -11,14 +11,14 @@ export class AppComponent {
   selectedButton = null;
 
   constructor(private agoraService: AgoraService) { }
-  
-  onStartCallHandler(event: MouseEvent) {
-    console.log("Event Transfered to App component => Starting a Video Call...");
-    //this.agoraService.startCall();
+
+  onStartCallHandler(event: MouseEvent): void {
+    console.log('Event Transfered to App component => Starting a Video Call...');
+    this.agoraService.startCall();
   }
 
-  onLeaveCallHandler(event: MouseEvent) {
-    console.log("Event Transfered to App component => Leaving the call..");
-    //this.agoraService.endCall();
+  onLeaveCallHandler(event: MouseEvent): void {
+    console.log('Event Transfered to App component => Leaving the call..');
+    this.agoraService.endCall();
   }
 }

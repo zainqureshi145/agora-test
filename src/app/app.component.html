@@ -6,4 +6,7 @@
 <br>
 <app-speaker-view></app-speaker-view> -->
 
-<app-moderator-view (click) = onStartCallHandler($event)></app-moderator-view>
+<app-moderator-view
+        (startCallEvent)="onStartCallHandler($event)"
+        (leaveCallEvent)="onLeaveCallHandler($event)"
+></app-moderator-view>
