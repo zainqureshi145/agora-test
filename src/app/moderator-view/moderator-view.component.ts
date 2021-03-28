@@ -1,31 +1,22 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-//import { AgoraService } from '../agora.service';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-moderator-view',
   templateUrl: './moderator-view.component.html',
   styleUrls: ['./moderator-view.component.css']
 })
-export class ModeratorViewComponent implements OnInit {
+export class ModeratorViewComponent {
 
   @Output() startCallEvent = new EventEmitter<MouseEvent>();
+  @Output() answerEvent = new EventEmitter<MouseEvent>();
   @Output() leaveCallEvent = new EventEmitter<MouseEvent>();
 
-  //Dependency Injection AgoraService
-  //constructor(private agoraService: AgoraService) { }
-  constructor(){}
-
-  ngOnInit(): void {
-  }
-
-  onStartCallHandler(event: MouseEvent) {
+  onStartCallHandler(event: MouseEvent): void {
     this.startCallEvent.emit(event);
-    //console.log("Starting a Video Call...", event);
   }
 
-  onLeaveCallHandler(event: MouseEvent) {
+  onLeaveCallHandler(event: MouseEvent): void {
     this.leaveCallEvent.emit(event);
-    //console.log("Leaving the call..", event);
   }
 
 }

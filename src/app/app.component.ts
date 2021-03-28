@@ -13,8 +13,7 @@ export class AppComponent {
   constructor(private agoraService: AgoraService) { }
 
   onStartCallHandler(event: MouseEvent): void {
-    console.log('Event Transfered to App component => Starting a Video Call...');
-    this.agoraService.startCall();
+    this.agoraService.joinCall();
   }
 
   onLeaveCallHandler(event: MouseEvent): void {
