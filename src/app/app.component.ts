@@ -14,11 +14,11 @@ export class AppComponent {
   
   onStartCallHandler(event: MouseEvent) {
     console.log("Event Transfered to App component => Starting a Video Call...");
-    //this.agoraService.startCall();
+    this.agoraService.startCall();
   }
 
   onLeaveCallHandler(event: MouseEvent) {
     console.log("Event Transfered to App component => Leaving the call..");
-    //this.agoraService.endCall();
+    this.agoraService.endCall();
   }
 }
