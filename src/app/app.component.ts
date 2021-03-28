@@ -21,4 +21,9 @@ export class AppComponent {
     console.log("Event Transfered to App component => Leaving the call..");
     this.agoraService.endCall();
   }
+
+  onJoinCallHandler(event: MouseEvent) {
+    console.log("Joining a call...");
+    this.agoraService.joinCall();
+  }
 }

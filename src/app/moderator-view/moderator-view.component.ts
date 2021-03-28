@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 //import { AgoraService } from '../agora.service';
 
 @Component({
@@ -8,8 +8,10 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class ModeratorViewComponent implements OnInit {
 
+
   @Output() startCallEvent = new EventEmitter<MouseEvent>();
   @Output() leaveCallEvent = new EventEmitter<MouseEvent>();
+  @Output() joinCallEvent = new EventEmitter<MouseEvent>();
 
   //Dependency Injection AgoraService
   //constructor(private agoraService: AgoraService) { }
@@ -26,6 +28,10 @@ export class ModeratorViewComponent implements OnInit {
   onLeaveCallHandler(event: MouseEvent) {
     this.leaveCallEvent.emit(event);
     //console.log("Leaving the call..", event);
+  }
+
+  onJoinCallHandler(event: MouseEvent) {
+    this.joinCallEvent.emit(event);
   }
 
 }
