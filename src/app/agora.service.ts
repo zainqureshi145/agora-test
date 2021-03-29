@@ -32,8 +32,8 @@ export class AgoraService {
   //Start A Basic Call
   async startCall() {
     console.log("Inside AgoraService startCall() Function");
-    const agoraRTCClient = rtc.client = AgoraRTC.createClient({ mode: "live", codec: "h264", role: "host" });
-    const uid = await agoraRTCClient.join(options.appId, options.channel, options.token);
+    const agoraRTCClient = rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "h264", role: "host" });
+    await agoraRTCClient.join(options.appId, options.channel, options.token);
 
     rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     rtc.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
@@ -57,16 +57,21 @@ export class AgoraService {
     console.log("Inside AgoraService endCall() Function");
     rtc.localAudioTrack.close();
     rtc.localVideoTrack.close();
+    rtc.remoteAudioTrack.close();
+    rtc.remoteVideoTrack.close();
     await rtc.client.leave();
+    await rtc.audience.leave();
     console.log("Disconnected...");
   }
 
   async joinCall() {
     console.log("Inside AgoraService joinCall() Function");
-    const agoraRTCClient = rtc.client = AgoraRTC.createClient({ mode: "live", codec: "h264", role: "audience" });
-    const uid = await agoraRTCClient.join(options.appId, options.channel, options.token);
+    const agoraRTCClient = rtc.audience = AgoraRTC.createClient({ mode: "rtc", codec: "h264", role: "audience" });
+    await agoraRTCClient.join(options.appId, options.channel, options.token);
     agoraRTCClient.subscribe(agoraRTCClient.remoteUsers[0], "video");
     console.log("SUBSCRIBED??")
+    console.log(agoraRTCClient.uid);
+    console.log(agoraRTCClient.remoteUsers);
     rtc.remoteAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     rtc.remoteVideoTrack = await AgoraRTC.createCameraVideoTrack();
     rtc.remoteVideoTrack.play('remote-stream');
