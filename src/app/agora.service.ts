@@ -3,7 +3,7 @@ import AgoraRTC, {IAgoraRTCClient} from 'agora-rtc-sdk-ng';
 
 var rtc = {
   // For the local client.
-  client: null,
+  host: null,
   audience: null,
   // For the local audio and video tracks.
   localAudioTrack: null,
@@ -21,6 +21,9 @@ var options = {
   token: "0069f7a20c68b094028802f1129c24b1fb9IAAB4Bsa6Hn/YzTIYu9XumpsaeviLEPVum3gV4VZmJWnvwx+f9gAAAAAEAC5X9YGUQ9iYAEAAQBRD2Jg"
 };
 
+//let remoteUser = 2459608612;
+let remoteUsers = [];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,19 +35,19 @@ export class AgoraService {
   //Start A Basic Call
   async startCall() {
     console.log("Inside AgoraService startCall() Function");
-    const agoraRTCClient = rtc.client = AgoraRTC.createClient({ mode: "rtc", codec: "h264", role: "host" });
-    await agoraRTCClient.join(options.appId, options.channel, options.token);
+    rtc.host = AgoraRTC.createClient({ mode: "rtc", codec: "h264", role: "host" });
+    await rtc.host.join(options.appId, options.channel, options.token);
 
     rtc.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
     rtc.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
     rtc.localAudioTrack.play();
     rtc.localVideoTrack.play('local-stream');
 
-    await agoraRTCClient.publish([rtc.localAudioTrack, rtc.localVideoTrack]);
+    await rtc.host.publish([rtc.localAudioTrack, rtc.localVideoTrack]);
     console.log("publish success!");
 
-    console.log(agoraRTCClient.remoteUsers);
-    console.log(agoraRTCClient.uid);
+    console.log(rtc.host.remoteUsers);
+    console.log(rtc.host.uid);
 
     //There are no remote users here
 
@@ -59,21 +62,24 @@ export class AgoraService {
     rtc.localVideoTrack.close();
     rtc.remoteAudioTrack.close();
     rtc.remoteVideoTrack.close();
-    await rtc.client.leave();
+    await rtc.host.leave();
     await rtc.audience.leave();
     console.log("Disconnected...");
   }
 
   async joinCall() {
     console.log("Inside AgoraService joinCall() Function");
-    const agoraRTCClient = rtc.audience = AgoraRTC.createClient({ mode: "rtc", codec: "h264", role: "audience" });
-    await agoraRTCClient.join(options.appId, options.channel, options.token);
-    agoraRTCClient.subscribe(agoraRTCClient.remoteUsers[0], "video");
+    rtc.audience = AgoraRTC.createClient({ mode: "rtc", codec: "h264", role: "audience" });
+    const uid = await rtc.audience.join(options.appId, options.channel, options.token);
+    const remoteUsers = rtc.audience.subscribe(rtc.host, "video");
     console.log("SUBSCRIBED??")
-    console.log(agoraRTCClient.uid);
-    console.log(agoraRTCClient.remoteUsers);
-    rtc.remoteAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-    rtc.remoteVideoTrack = await AgoraRTC.createCameraVideoTrack();
-    rtc.remoteVideoTrack.play('remote-stream');
+    console.log(rtc.host);
+    remoteUsers.remoteVideoTrack.play('remote-stream');
+
+    //console.log("UID: ", agoraRTCClient.uid);
+    //console.log("Remote User: ",agoraRTCClient.remoteUsers);
+    //rtc.remoteAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
+    //rtc.remoteVideoTrack = await AgoraRTC.createCameraVideoTrack();
+    //rtc.remoteVideoTrack.play('remote-stream');
   }
 }
